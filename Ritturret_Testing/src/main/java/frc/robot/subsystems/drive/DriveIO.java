@@ -2,15 +2,21 @@ package frc.robot.subsystems.drive;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface DriveIO {
-  @AutoLog
-  public static class TurretIOInputs {
-    public boolean connected = true;
-    public double appliedVoltage = 0.0;
-    public double supplyCurrentAmps = 0.0;
-    public double tempCelsius = 0.0;
-  }
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 
-  public default void updateInputs(TurretIOInputs inputs) {}
-    
+public interface DriveIO {
+    @AutoLog
+    public static class DriveIOInputs {
+    }
+
+    public default void updateInputs(DriveIOInputs inputs) {
+    }
+
+    public default void requestSpeeds(ChassisSpeeds speeds, Rotation2d gyroAngle){
+    }
+
+    public default void requestSpeeds(ChassisSpeeds speeds){
+    }
+
 }
