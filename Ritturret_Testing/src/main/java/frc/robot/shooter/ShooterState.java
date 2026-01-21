@@ -35,4 +35,12 @@ public class ShooterState {
     public static Supplier<ShooterState> getHubSetpointSupplier(){
         return () -> fromHub();
     }
+
+    public double getTurretPosition(){
+        return turretPosition;
+    }
+
+    public double getTurretFF(){
+        return turretFF;
+    }
 }

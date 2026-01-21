@@ -23,8 +23,12 @@ public class Turret extends SubsystemBase {
         Logger.processInputs("Turret", inputs);
     }
 
+    public void setSetpoint(double position, double velocity){
+        io.setSetpoint(position, velocity);
+    }
+
     // TODO: figure out how tf to name ts
-    public Command requestPositionCommand(DoubleSupplier position, DoubleSupplier velocity){
+    public Command setpointCommand(DoubleSupplier position, DoubleSupplier velocity){
         return Commands.run(() -> {
             io.setSetpoint(position.getAsDouble(), velocity.getAsDouble());
         });
