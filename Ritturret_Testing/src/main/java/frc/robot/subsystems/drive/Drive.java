@@ -38,11 +38,15 @@ public class Drive extends SubsystemBase {
     }
 
     public Command runChassisSpeeds(Supplier<ChassisSpeeds> speeds){
-        return Commands.run(() -> io.requestSpeeds(speeds.get(), gyroInputs.heading));
+        return run(() -> io.requestSpeeds(speeds.get()));
     }
 
     private ChassisSpeeds getSpeedsFromController(){
-        return new ChassisSpeeds(-controller.getLeftY(), -controller.getLeftX(), -controller.getRightX());
+        return new ChassisSpeeds(controller.getLeftX(), -controller.getLeftY(), -controller.getRightX());
+    }
+
+    public Command zero(){
+        return Commands.runOnce(() -> gyroIO.zero());
     }
     
 }

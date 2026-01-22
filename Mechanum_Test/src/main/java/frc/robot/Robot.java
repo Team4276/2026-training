@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import org.opencv.core.Mat.Tuple2;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;

@@ -14,7 +14,7 @@ public class DriveIOHardware implements DriveIO {
 
     public DriveIOHardware() {
         for (int i = 0; i < 4; i++) {
-            motors[i] = new VictorSPX(i);
+            motors[i] = new VictorSPX(i + 1);
         }
 
         motors[0].setInverted(true);

@@ -7,6 +7,11 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AimCommands;
 import frc.robot.shooter.ShooterState;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.drive.DriveIO;
+import frc.robot.subsystems.drive.DriveIOHardware;
+import frc.robot.subsystems.drive.GyroIO;
+import frc.robot.subsystems.drive.GyroIOHardware;
 import frc.robot.subsystems.turret.Turret;
 import frc.robot.subsystems.turret.TurretIO;
 import frc.robot.subsystems.turret.TurretIOHardware;
@@ -19,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class RobotContainer {
+  private Drive drive;
   private Turret turret;
 
   private Supplier<ShooterState> hubSetpointSupplier;
@@ -29,15 +35,27 @@ public class RobotContainer {
     if (Constants.getMode() != Constants.Mode.REPLAY) {
       switch (Constants.getType()) {
         case COMPBOT -> {
+          drive = new Drive(controller, new DriveIOHardware(), new GyroIOHardware());
           turret = new Turret(new TurretIOHardware());
         }
 
         case SIMBOT -> {
           // Sim robot, instantiate physics sim IO implementations
+          drive = new Drive(controller, new DriveIO() {
+          }, new GyroIO() {
+
+          });
           turret = new Turret(new TurretIO() {
           });
         }
       }
+    }
+
+    if (drive == null) {
+      drive = new Drive(controller, new DriveIO() {
+      }, new GyroIO() {
+
+      });
     }
 
     // No-op implmentations for replay
@@ -71,6 +89,10 @@ public class RobotContainer {
         .rightBumper()
         .toggleOnTrue(AimCommands.alignTurret(this, hubSetpointSupplier).repeatedly()
             .finallyDo(() -> AimCommands.alignTurret(this, () -> new ShooterState(0.0, 0.0))));
+
+    controller
+    .start()
+    .onTrue(drive.zero());
   }
 
   /**
