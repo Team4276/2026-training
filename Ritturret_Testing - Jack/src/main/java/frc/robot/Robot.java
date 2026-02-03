@@ -145,19 +145,37 @@ public class Robot extends LoggedRobot {
   @Override
   public void teleopPeriodic() 
   {
-    camerastuff.CameraUpdate();
+    //camerastuff.CameraUpdate();
     //camerastuff.CameraAim(controller.getAButton());
-    SmartDashboard.putBoolean("A Button Pressed", controller.getAButton());
-    double CameraAimReturn = camerastuff.CameraAim(controller.getAButton());
-    if (CameraAimReturn == 0.0)
+    SmartDashboard.putBoolean("X Button Pressed", controller.getXButton());
+    SmartDashboard.putBoolean("B Button Pressed", controller.getBButton());
+    SmartDashboard.putBoolean("A Button Pressed", controller.getXButton());
+    SmartDashboard.putBoolean("Y Button Pressed", controller.getYButton());
+    camerastuff.CameraTargetList();
+    //double CameraAimReturn = camerastuff.CameraAim(controller.getAButton());
+    double CameraAimReturnAlt = camerastuff.CameraAimB(!controller.getBButton(), true);
+    //SmartDashboard.putNumber("CameraAim Return", CameraAimReturn);
+    //SmartDashboard.putNumber("CameraAimB Return", CameraAimReturnAlt);
+    SmartDashboard.putNumber("TagYaw", camerastuff.CameraGetTargetYaw());
+    if(controller.getYButton())
+    { 
+      SmartDashboard.putNumber("TagYaw", camerastuff.CameraGetTargetYaw());
+    }
+    if (controller.getBButton())
     {
+      SmartDashboard.putNumber("TagYaw", camerastuff.CameraGetTargetYaw());
       learret.update(controller.getLeftTriggerAxis()-controller.getRightTriggerAxis());
     }
-    else
-    {
-      learret.update(CameraAimReturn);
-      SmartDashboard.putNumber("CameraAim Return", CameraAimReturn);
+    else if (!controller.getBButton())
+    { 
+      learret.update(CameraAimReturnAlt);
+      SmartDashboard.putNumber("CameraAimB Return", CameraAimReturnAlt);
     }
+    //else
+    //{
+    // learret.update(CameraAimReturn);
+    //  SmartDashboard.putNumber("CameraAim Return", CameraAimReturn);
+    //}
   }
 
   @Override
