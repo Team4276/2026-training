@@ -12,9 +12,11 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.learret.Learret;
+
 
 /**
  * The methods in this class are called automatically corresponding to each
@@ -28,6 +30,7 @@ public class Robot extends LoggedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
+  private Photonvision camerastuff = new Photonvision();
 
   private final Learret learret;
   XboxController controller = new XboxController(0);
@@ -96,7 +99,7 @@ public class Robot extends LoggedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
-    learret.update(controller.getLeftTriggerAxis()-controller.getRightTriggerAxis());
+    //learret.update(controller.getLeftTriggerAxis()-controller.getRightTriggerAxis());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -140,7 +143,21 @@ public class Robot extends LoggedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
+  public void teleopPeriodic() 
+  {
+    camerastuff.CameraUpdate();
+    //camerastuff.CameraAim(controller.getAButton());
+    SmartDashboard.putBoolean("A Button Pressed", controller.getAButton());
+    double CameraAimReturn = camerastuff.CameraAim(controller.getAButton());
+    if (CameraAimReturn == 0.0)
+    {
+      learret.update(controller.getLeftTriggerAxis()-controller.getRightTriggerAxis());
+    }
+    else
+    {
+      learret.update(CameraAimReturn);
+      SmartDashboard.putNumber("CameraAim Return", CameraAimReturn);
+    }
   }
 
   @Override
